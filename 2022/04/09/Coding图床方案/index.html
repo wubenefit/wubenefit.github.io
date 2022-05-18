@@ -1,0 +1,541 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wuBenefit">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本文由 wuBenefit 用户授权转载，版权归原作者所有。 本文作者：暮雨千泷原文地址：https:&#x2F;&#x2F;www.myql.xyz&#x2F;post&#x2F;92e90c46&#x2F;  现在绝大多数自建博客用的图床方案都是 GitHub + jsDelivr + PicGo，包括作者的站点也是一样，优点在于零成本，简单的搭建方式以及不错的访问速度，但随着 jsDelivr 备案被取消，国内访问不再稳定，我开始考虑更好">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coding图床方案">
+<meta property="og:url" content="http://example.com/2022/04/09/Coding%E5%9B%BE%E5%BA%8A%E6%96%B9%E6%A1%88/index.html">
+<meta property="og:site_name" content="wuBenefit">
+<meta property="og:description" content="本文由 wuBenefit 用户授权转载，版权归原作者所有。 本文作者：暮雨千泷原文地址：https:&#x2F;&#x2F;www.myql.xyz&#x2F;post&#x2F;92e90c46&#x2F;  现在绝大多数自建博客用的图床方案都是 GitHub + jsDelivr + PicGo，包括作者的站点也是一样，优点在于零成本，简单的搭建方式以及不错的访问速度，但随着 jsDelivr 备案被取消，国内访问不再稳定，我开始考虑更好">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/thumb-1920-1002134-2022-04-10.png">
+<meta property="article:published_time" content="2022-04-09T00:44:48.000Z">
+<meta property="article:modified_time" content="2022-05-18T00:32:00.000Z">
+<meta property="article:author" content="wuBenefit">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="图床">
+<meta property="article:tag" content="Coding">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/thumb-1920-1002134-2022-04-10.png">
+  
+  
+  <title>Coding图床方案 - wuBenefit</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>wuBenefit&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/banner06.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Coding图床方案">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-09 08:44" pubdate>
+        2022年4月9日 早上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      15 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Coding图床方案</h1>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>本文由 wuBenefit 用户授权转载，版权归原作者所有。</p>
+<p>本文作者：暮雨千泷<br>原文地址：<a target="_blank" rel="noopener" href="https://www.myql.xyz/post/92e90c46/">https://www.myql.xyz/post/92e90c46/</a></p>
+</blockquote>
+<p>现在绝大多数自建博客用的图床方案都是 GitHub + jsDelivr + PicGo，包括作者的站点也是一样，优点在于零成本，简单的搭建方式以及不错的访问速度，但随着 jsDelivr 备案被取消，国内访问不再稳定，我开始考虑更好的代替品。</p>
+<p>之前其实也试过 Coding 或 Gitee 作为自建图床，但是体验都不是特别完美，Coding 图床支持的软件太少了，不管是管理还是上传都并不是很方便，而 Gitee 图床超过 1M 就必须登录才能查看，之前试过使用类似于 <a target="_blank" rel="noopener" href="https://github.com/marketplace/actions/sync-repo-to-coding">Sync Repo to Coding</a> 将同步到 Coding，但是效果不太理想。</p>
+<h2 id="🤔-思路"><a href="#🤔-思路" class="headerlink" title="🤔 思路"></a>🤔 思路</h2><p>通过 Coding 持续集成自动将 GitHub 仓库实时同步到 Coding 仓库，并且替换 <code>PicGo</code> 中自定义网址。</p>
+<blockquote>
+<p>相同方法适用于 Gitee，不过更建议使用 Coding。</p>
+</blockquote>
+<h2 id="🧐-优势"><a href="#🧐-优势" class="headerlink" title="🧐 优势"></a>🧐 优势</h2><p>Coding 每月 1000 分钟，单任务 30 分钟，并且不限次数，仅用来同步完全够用，并且构建速度极快，每次构建 7~8 秒左右，通过 PicGo 上传图片后几乎感觉不到太大的延迟就可以显示出图片。</p>
+<p>相比于直接使用 Coding 或 Gitee 当图床的优势在于：</p>
+<ul>
+<li>支持的软件和项目变多</li>
+<li>可以通过 vscode 等一键替换已有链接，达成无感迁移</li>
+<li>不改变原有基于 GitHub + jsDelivr + PicGo 方案的使用方式</li>
+<li>可以搭配类似于 <a target="_blank" rel="noopener" href="https://github.com/apps/imgbot">Imgbot</a> 或 <a target="_blank" rel="noopener" href="https://github.com/namoscato/action-tinify">action-tinify</a> 完成图片的<strong>自动压缩优化</strong></li>
+<li>管理方面可以使用 <a target="_blank" rel="noopener" href="https://github.com/XPoet/picx">picx</a> 或 <a target="_blank" rel="noopener" href="https://github.com/xjh22222228/boomb">boomb</a> 类似的项目进行在线管理</li>
+</ul>
+<h2 id="🪛-需要的准备"><a href="#🪛-需要的准备" class="headerlink" title="🪛 需要的准备"></a>🪛 需要的准备</h2><ul>
+<li>GitHub 账号</li>
+<li>Coding 账号</li>
+<li>VScode &#x2F; Typora</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/PicGo">PicGo</a> &#x2F; <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=Spades.vs-picgo">vs-picgo</a> &#x2F; <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=hancel.markdown-image">Markdown Image</a></li>
+</ul>
+<h2 id="🛠️-部署"><a href="#🛠️-部署" class="headerlink" title="🛠️ 部署"></a>🛠️ 部署</h2><p>打开 <a target="_blank" rel="noopener" href="https://e.coding.net/login">Coding</a> 后创建一个项目。</p>
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-16-35-57.png" srcset="/img/loading.gif" lazyload></p>
+<p>选择按需选择，勾选<code>代码托管</code>和<code>构建流水线&amp;自动化测试</code>完成创建。</p>
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-17-00-37.png" srcset="/img/loading.gif" lazyload></p>
+<p>进入项目后先创建项目令牌，记录下用户名和密码备用。</p>
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-17-03-48.png" srcset="/img/loading.gif" lazyload></p>
+<p>接下来导入 GitHub 中你选择当图床的仓库。</p>
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-16-54-24.png" srcset="/img/loading.gif" lazyload></p>
+<p>完成后点击<code>持续集成</code>选择<code>构建计划</code>划到最下方选择自定义构建过程，代码仓库选择<code>GitHub</code>选择你刚刚导入的仓库。</p>
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-17-18-30.png" srcset="/img/loading.gif" lazyload></p>
+<p>点击<code>确定</code>后会自动跳转到配置流程，点击<code>文本编辑器</code> 输入以下代码，记得替换成自己的 Coding 仓库 Url：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></div></td><td class="code"><pre><code class="hljs javascript">pipeline &#123;<br>  agent any<br>  stages &#123;<br>    <span class="hljs-title function_">stage</span>(<span class="hljs-params"><span class="hljs-string">&quot;检出&quot;</span></span>) &#123;<br>      steps &#123;<br>        <span class="hljs-title function_">checkout</span>([<br>          <span class="hljs-attr">$class</span>: <span class="hljs-string">&#x27;GitSCM&#x27;</span>,<br>          <span class="hljs-attr">branches</span>: [[<span class="hljs-attr">name</span>: <span class="hljs-variable constant_">GIT_BUILD_REF</span>]],<br>          <span class="hljs-attr">userRemoteConfigs</span>: [[<br>            <span class="hljs-attr">url</span>: <span class="hljs-variable constant_">GIT_REPO_URL</span>,<br>            <span class="hljs-attr">credentialsId</span>: <span class="hljs-variable constant_">CREDENTIALS_ID</span><br>        ]]])<br>      &#125;<br>    &#125;<br>    <span class="hljs-title function_">stage</span>(<span class="hljs-params"><span class="hljs-string">&#x27;拉取到Coding&#x27;</span></span>) &#123;<br>      steps &#123;<br>        echo <span class="hljs-string">&quot;正在拉取&quot;</span><br>        sh <span class="hljs-string">&#x27;git push -f https://$CODING_NAME:$CODING_TOKEN@e.coding.net/你的团队名/项目名称/代码仓库名称.git HEAD:main&#x27;</span><br>        echo <span class="hljs-string">&quot;拉取完成&quot;</span><br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-17-31-41.png" srcset="/img/loading.gif" lazyload></p>
+<p>在环境变量里输入<code>CODING_NAME</code>和<code>CODING_TOKEN</code>值就是刚刚申请的项目令牌的用户名和密码，完成后记得保存。</p>
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-17-41-09.png" srcset="/img/loading.gif" lazyload></p>
+<p>在<code>触发规则</code>里修改触发方式为推送到<code>main</code>分支时触发，并且将手动触发改为<code>main</code>（可根据自己实际需求选择）。</p>
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-17-46-15.png" srcset="/img/loading.gif" lazyload></p>
+<p>完成后点击<code>立即构建</code>, 从现在起，你在 GitHub 上的仓库会自动同步到 Coding 仓库上，到此部署结束。</p>
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-19-02-15.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="🚀-实际使用"><a href="#🚀-实际使用" class="headerlink" title="🚀 实际使用"></a>🚀 实际使用</h2><p>开打 <a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/PicGo">PicGo</a> &#x2F; <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=Spades.vs-picgo">vs-picgo</a> &#x2F; <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=hancel.markdown-image">Markdown Image</a> 中的任意一个，配置GitHub图床，将自定义网址替换为：<br><code>https://你的团队名.coding.net/p/你的项目名称/d/你的代码仓库名称/git/raw/main</code>。</p>
+<p>以 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=Spades.vs-picgo">vs-picgo</a> 为例：</p>
+<p><img src="https://wub1.coding.net/p/drawing_bed/d/img/git/raw/master/2022-03-12-18-07-36.png" srcset="/img/loading.gif" lazyload></p>
+<p>现在直接使用快捷键上传图像，图片会自动将 GitHub 的链接替换为 Coding 的链接，请开始愉快的写作吧！</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%B7%A5%E5%85%B7/">工具</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%9B%BE%E5%BA%8A/">图床</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Coding/">Coding</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/18/QQ%E5%88%87%E6%8D%A2%E6%B7%B1%E8%89%B2%E4%B8%BB%E9%A2%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">QQ切换深色主题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"Wnvwrgtjtu8WSQheTO1EcyOe-MdYXbMMI","appKey":"g1dhttosPwTmOyGCVX1R2P4G","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
