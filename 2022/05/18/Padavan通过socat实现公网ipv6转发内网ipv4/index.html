@@ -19,7 +19,7 @@
     <meta name="description" content="本文作者：Seeker原文地址：http:&#x2F;&#x2F;www.yizu.org&#x2F;archives&#x2F;786&#x2F;  在没有公网IP的情况下，我们会采用内网穿透的方式访问内网，比如frp，但是这种方式需要一台公网服务器，而且速度受到这台服务器带宽的限制，体验可能很一般。但是如果我们有公网ipv6地址，就可直接访问家里设备了。如果你的路由器有IPv6地址，而内网设备因为种种原因没有IPv6，但需要公网访问，可以使">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Padavan通过socat实现公网ipv6转发内网ipv4">
-<meta property="og:url" content="http://example.com/2022/05/18/Padavan%E9%80%9A%E8%BF%87socat%E5%AE%9E%E7%8E%B0%E5%85%AC%E7%BD%91ipv6%E8%BD%AC%E5%8F%91%E5%86%85%E7%BD%91ipv4/index.html">
+<meta property="og:url" content="http://wblog.ml/2022/05/18/Padavan%E9%80%9A%E8%BF%87socat%E5%AE%9E%E7%8E%B0%E5%85%AC%E7%BD%91ipv6%E8%BD%AC%E5%8F%91%E5%86%85%E7%BD%91ipv4/index.html">
 <meta property="og:site_name" content="wuBenefit">
 <meta property="og:description" content="本文作者：Seeker原文地址：http:&#x2F;&#x2F;www.yizu.org&#x2F;archives&#x2F;786&#x2F;  在没有公网IP的情况下，我们会采用内网穿透的方式访问内网，比如frp，但是这种方式需要一台公网服务器，而且速度受到这台服务器带宽的限制，体验可能很一般。但是如果我们有公网ipv6地址，就可直接访问家里设备了。如果你的路由器有IPv6地址，而内网设备因为种种原因没有IPv6，但需要公网访问，可以使">
 <meta property="og:locale" content="zh_CN">
@@ -79,7 +79,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"wblog.ml","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
